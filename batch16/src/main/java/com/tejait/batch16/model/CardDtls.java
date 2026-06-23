@@ -12,16 +12,20 @@ public class CardDtls {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 private int cdid;
+private Integer cardId;
+
 private long cardNum;
+private String cardType;
 private int cvv;
 private int pin;
 
-	public int getCdid() {
-		return cdid;
-	}
-	public void setCdid(int cdid) {
-		this.cdid = cdid;
-	}
+public String getCardType() {
+	return cardType;
+}
+public void setCardType(String cardType) {
+	this.cardType = cardType;
+}
+
 	public long getCardNum() {
 		return cardNum;
 	}
@@ -39,6 +43,12 @@ private int pin;
 	}
 	public void setPin(int pin) {
 		this.pin = pin;
+	}
+	public Integer getCardId() {
+		return cardId;
+	}
+	public void setCardId(Integer cardId) {
+		this.cardId = cardId;
 	}
 	
 }
