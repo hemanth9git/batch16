@@ -10,7 +10,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 
 @RestControllerAdvice//Spring boot will rcognize this is global Exception handler
+//So all the custom exception handlings will be done here
 public class GlobalExceptionHandler {
+	/*
+	 * We are creating the global springBoot exception handling so we should have a
+	 * format of handling exception and the format here is ErrorDtls class
+	 * there are the attributes for global custom handling procedure to handle the
+	 * Custom Exceptions 
+	 * Here the @RestControllerAdvice annotaion will be given to recognised by the
+	 * springboot that this is our custom handler class
+	 * And the @ExceptionHandler annotation will give the customised exception handlings
+	 */
 	
 	@ExceptionHandler(IdNotFoundException.class) //Used to handle the custom exception named IdNotFoundException
 	public ResponseEntity<ErrorDtls> IdNotFoundException(HttpServletRequest request){
