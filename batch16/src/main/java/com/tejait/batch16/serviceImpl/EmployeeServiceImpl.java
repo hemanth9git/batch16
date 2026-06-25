@@ -165,5 +165,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		return repositary.searchEngine(searchText);
 	}
+	@Override
+	public Boolean existsById(Integer id) {
+		return repositary.existsById(id);
+	}
 
 }

@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tejait.batch16.model.Student;
 import com.tejait.batch16.service.StudentService;
 
-
-
-
-
 @RestController
 @RequestMapping("student")
 public class StudentController {

@@ -52,5 +52,7 @@ public interface EmployeeService {
 
 	public List<Employee> getBySearch(String searchText);
 
+	public Boolean existsById(Integer id);
+
 	//public List<Employee> getByDistinct(String fname, String lname);
 }

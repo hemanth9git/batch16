@@ -1,4 +1,4 @@
-package com.tejait.batch16.controller;
+	package com.tejait.batch16.controller;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tejait.batch16.exceptions.IdNotFoundException;
 import com.tejait.batch16.model.Employee;
 import com.tejait.batch16.service.EmployeeService;
 
@@ -183,5 +184,14 @@ public class EmployeeController {
 	public ResponseEntity<List<Employee>> searchEmployees(@PathVariable String searchText){
 		List<Employee> list=service.getBySearch(searchText);
 		return new ResponseEntity<>(list, HttpStatus.OK);
+	}
+	
+	@GetMapping("existsById/{id}")
+	public ResponseEntity<Boolean> existsById(@PathVariable Integer id){
+		Boolean result=service.existsById(id);
+		if(!result) {
+			throw new IdNotFoundException();
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 }
