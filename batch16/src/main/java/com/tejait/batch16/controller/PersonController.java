@@ -3,10 +3,12 @@ package com.tejait.batch16.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tejait.batch16.dto.PersonItemsDto;
 import com.tejait.batch16.model.Person;
 import com.tejait.batch16.service.PersonService;
 
@@ -26,6 +28,12 @@ public class PersonController {
 	public ResponseEntity<Person> savePersonPan(@RequestBody Person person){
 		Person savedPerson=service.savePersonPan(person);
 		return new ResponseEntity<Person>(savedPerson, HttpStatus.OK);
+	}
+	
+	@PostMapping("mapPersonToItems")
+	public ResponseEntity<Person> mapPersonToItems(@RequestBody PersonItemsDto dto){
+		Person person=service.mapPersonToItems(dto);
+		return new ResponseEntity<Person>(person, HttpStatus.OK);
 	}
 
 }

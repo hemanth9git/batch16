@@ -1,10 +1,16 @@
 package com.tejait.batch16.model;
 
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -26,4 +32,14 @@ private int age;
 @OneToOne(mappedBy = "perPan",cascade = CascadeType.ALL)
 private Pan pan;
 
+@OneToMany(mappedBy ="ordPer",cascade = CascadeType.ALL )
+private List<Orders> orders;
+
+@ManyToMany
+@JoinTable(
+		name="person_item",
+		joinColumns = @JoinColumn(name="pid"),
+		inverseJoinColumns = @JoinColumn(name="iid")
+		)
+private List<Items> items;
 }
