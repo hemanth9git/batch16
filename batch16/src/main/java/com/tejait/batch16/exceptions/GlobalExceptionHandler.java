@@ -34,11 +34,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(errorDtls, HttpStatus.BAD_REQUEST);
 	}
 	
-	@ExceptionHandler(Exception.class) //Used to handle all the exceptions in the springBoot
-	public ResponseEntity<ErrorDtls> globalExceptionHandler(HttpServletRequest request){
-		ErrorDtls errorDtls=new ErrorDtls(new Date(), 1280, "Exception Occured", "Something Went Wrong", request.getRequestURI());
-		return new ResponseEntity<>(errorDtls, HttpStatus.BAD_REQUEST);
-	}
+//	@ExceptionHandler(Exception.class) //Used to handle all the exceptions in the springBoot
+//	public ResponseEntity<ErrorDtls> globalExceptionHandler(HttpServletRequest request){
+//		ErrorDtls errorDtls=new ErrorDtls(new Date(), 1280, "Exception Occured", "Something Went Wrong", request.getRequestURI());
+//		return new ResponseEntity<>(errorDtls, HttpStatus.BAD_REQUEST);
+//	}
 	
 	
 
