@@ -12,11 +12,11 @@ public class Batch16Application {
 public static final Logger logger=LogManager.getLogger(Batch16Application.class);
 	public static void main(String[] args) {
 		SpringApplication.run(Batch16Application.class, args);
-		logger.debug("Debug method");
-		logger.info("info method");
-		logger.warn("Warn method");
-		logger.error("Error method");
-		logger.fatal("Fatal Method");
+		logger.debug("Debug method");// for developer use case
+		logger.info("info method");// production use case
+		logger.warn("Warn method");//To show warning logs
+		logger.error("Error method");// To show error logs
+		logger.fatal("Fatal Method");//to show server or debug issues logs
 		
 	}
 
