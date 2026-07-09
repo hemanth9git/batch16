@@ -1,0 +1,40 @@
+package com.tejait.batch16.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tejait.batch16.model.LoanApplication;
+import com.tejait.batch16.service.LoanService;
+
+import lombok.AllArgsConstructor;
+
+@CrossOrigin(origins = "http://localhost:4200")
+@AllArgsConstructor
+@RestController
+@RequestMapping("loans")
+public class LoanController {
+	
+	LoanService service;
+	
+	@PostMapping("/applyLoan")
+	public ResponseEntity<LoanApplication> applyLoan(@RequestBody LoanApplication loan){
+		LoanApplication savedLoan=service.applyLoan(loan);
+		return new ResponseEntity<>(savedLoan, HttpStatus.CREATED);
+	}
+	
+
+	@GetMapping("loanTaskboard")
+	public ResponseEntity<List<LoanApplication>> loanTaskboard(){
+		List<LoanApplication> loansList=service.LoansList();
+		return new ResponseEntity<>(loansList, HttpStatus.OK);
+	}
+
+}

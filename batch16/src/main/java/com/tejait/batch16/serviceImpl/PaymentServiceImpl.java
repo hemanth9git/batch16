@@ -45,5 +45,29 @@ public class PaymentServiceImpl implements Paymentservice{
 		
 		
 	}
+	/*
+	 * Think of it as the diary of your application.
+	 * For example, if your Order Service receives a request, checks product 
+	 * availability, saves an order, and sends a notification, a logger can 
+	 * record each step.
+	 * Without logs, if something goes wrong, you only know that the application
+	 *  failed. With logs, you can see where, when, and why it failed.
+	 *  Problem 2: Cannot disable messages easily
+
+Imagine you have:
+
+System.out.println("Checking product...");
+
+in 500 places.
+
+When you deploy to production, you don't want all those messages filling the console.
+
+With loggers, you simply configure:
+
+logging.level.root=INFO
+
+All DEBUG messages are automatically hidden without changing your code.
+	 *
+	 */
 
 }

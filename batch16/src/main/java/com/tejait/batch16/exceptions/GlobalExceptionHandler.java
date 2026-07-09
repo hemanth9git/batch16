@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(DetailsAlreadyExists.class)
 	public ResponseEntity<ErrorDtls> deatilsAlreayExists(HttpServletRequest request){
-		ErrorDtls errorDtls=new ErrorDtls(new Date(), 412, "Details not Found", "There is no record of given ID", request.getRequestURI());
+		ErrorDtls errorDtls=new ErrorDtls(new Date(), 412, "Already Exists", "The given details already exists", request.getRequestURI());
 		return new ResponseEntity<>(errorDtls, HttpStatus.BAD_REQUEST);
 	}
 	
@@ -39,6 +39,8 @@ public class GlobalExceptionHandler {
 //		ErrorDtls errorDtls=new ErrorDtls(new Date(), 1280, "Exception Occured", "Something Went Wrong", request.getRequestURI());
 //		return new ResponseEntity<>(errorDtls, HttpStatus.BAD_REQUEST);
 //	}
+	
+	
 	
 	
 
