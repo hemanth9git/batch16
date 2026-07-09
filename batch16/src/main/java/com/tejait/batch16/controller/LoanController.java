@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.service.LoanService;
 
@@ -30,11 +32,26 @@ public class LoanController {
 		return new ResponseEntity<>(savedLoan, HttpStatus.CREATED);
 	}
 	
+	@GetMapping("getLoanDetails/{appId}")
+	public ResponseEntity<LoanApplication> getLoanDetails(@PathVariable Integer appId){
+		LoanApplication getLoan=service.getLoanDetails(appId);
+		return new ResponseEntity<LoanApplication>(getLoan, HttpStatus.OK);
+	}
 
 	@GetMapping("loanTaskboard")
 	public ResponseEntity<List<LoanApplication>> loanTaskboard(){
 		List<LoanApplication> loansList=service.LoansList();
 		return new ResponseEntity<>(loansList, HttpStatus.OK);
 	}
+	
+	
+	@PostMapping("/saveProductDetails/{appId}")
+	public ResponseEntity<BusinessProduct> saveBusinessProductDetails(@PathVariable Integer appId,@RequestBody BusinessProduct product){
+		product.setAppid(appId);
+		BusinessProduct savedProduct=service.saveBusinessProductDetails(product);
+		return new ResponseEntity<BusinessProduct>(savedProduct, HttpStatus.OK);
+	}
+	
+	
 
 }

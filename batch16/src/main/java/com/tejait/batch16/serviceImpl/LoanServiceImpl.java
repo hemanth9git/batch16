@@ -5,7 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
+import com.tejait.batch16.exceptions.IdNotFoundException;
+import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.LoanApplication;
+import com.tejait.batch16.repository.BusinessProductRepository;
 import com.tejait.batch16.repository.LoanRepository;
 import com.tejait.batch16.service.LoanService;
 
@@ -16,6 +19,8 @@ import lombok.AllArgsConstructor;
 public class LoanServiceImpl implements LoanService{
 
 	LoanRepository repository;
+	
+	BusinessProductRepository productRepository;
 
 	@Override
 	public LoanApplication applyLoan(LoanApplication loan) {
@@ -43,6 +48,33 @@ public class LoanServiceImpl implements LoanService{
 		
 		return repository.findAll();
 	}
+
+	@Override
+	public LoanApplication getLoanDetails(Integer appId) {
+		
+		return repository.findById(appId).orElseThrow(IdNotFoundException::new);
+	}
+
+	@Override
+	public BusinessProduct saveBusinessProductDetails(BusinessProduct product) {
+		
+		BusinessProduct getProduct=productRepository.findByAppid(product.getAppid());
+		
+		if(getProduct!=null) {
+			
+			getProduct.setLoanAmount(product.getLoanAmount());
+			getProduct.setNatureOfBusiness(product.getNatureOfBusiness());
+			getProduct.setPurposeOfLoan(product.getPurposeOfLoan());
+			getProduct.setTenure(product.getTenure());
+			
+			return productRepository.save(getProduct);
+		}else {
+			return productRepository.save(product);
+		}
+	
+	}
+	
+	
 
 	
 	
