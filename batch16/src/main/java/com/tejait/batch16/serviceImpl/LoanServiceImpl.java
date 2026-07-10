@@ -7,8 +7,12 @@ import org.springframework.stereotype.Service;
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
 import com.tejait.batch16.exceptions.IdNotFoundException;
 import com.tejait.batch16.model.BusinessProduct;
+import com.tejait.batch16.model.CompanyAddress;
+import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.repository.BusinessProductRepository;
+import com.tejait.batch16.repository.CompanyAddressRepository;
+import com.tejait.batch16.repository.CompanyDetailsRepository;
 import com.tejait.batch16.repository.LoanRepository;
 import com.tejait.batch16.service.LoanService;
 
@@ -21,6 +25,8 @@ public class LoanServiceImpl implements LoanService{
 	LoanRepository repository;
 	
 	BusinessProductRepository productRepository;
+	CompanyDetailsRepository detailsRepository;
+	CompanyAddressRepository addressRepository;
 
 	@Override
 	public LoanApplication applyLoan(LoanApplication loan) {
@@ -72,6 +78,45 @@ public class LoanServiceImpl implements LoanService{
 			return productRepository.save(product);
 		}
 	
+	}
+
+	@Override
+	public CompanyDetails saveCompanyDetails(CompanyDetails companyDetails) {
+		CompanyDetails savedDetails=detailsRepository.findByAppId(companyDetails.getAppId());
+		if(savedDetails!=null) {
+			savedDetails.setCompanyName(companyDetails.getCompanyName());
+			savedDetails.setCompanyPan(companyDetails.getCompanyPan());
+			savedDetails.setDateOfEstablish(companyDetails.getDateOfEstablish());
+			savedDetails.setGstin(companyDetails.getGstin());
+			savedDetails.setTurnover(companyDetails.getTurnover());
+			return detailsRepository.save(savedDetails);
+		}
+		return detailsRepository.save(companyDetails);
+		
+	}
+
+	@Override
+	public CompanyDetails getCompanyDetails(Integer appId) {
+		
+		return detailsRepository.findByAppId(appId);
+	}
+
+	@Override
+	public CompanyAddress saveCompanyAddress(CompanyAddress address) {
+		CompanyAddress gotAddress=addressRepository.findByAppId(address.getAppId());
+		if(gotAddress!=null) {
+			gotAddress.setArea(address.getArea());
+			gotAddress.setBuilding(address.getBuilding());
+			gotAddress.setCity(address.getBuilding());
+			gotAddress.setFlatNum(address.getFlatNum());
+			gotAddress.setLandmark(address.getLandmark());
+			gotAddress.setLine(address.getLine());
+			gotAddress.setPincode(address.getPincode());
+			gotAddress.setState(address.getState());
+			
+			return addressRepository.save(gotAddress);
+		}
+		return addressRepository.save(gotAddress);
 	}
 	
 	

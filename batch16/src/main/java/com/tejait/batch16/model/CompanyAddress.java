@@ -1,6 +1,9 @@
 package com.tejait.batch16.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -9,6 +12,8 @@ import lombok.Data;
 @Table(name = "company_address")
 public class CompanyAddress {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	private int appId;
 	private String flatNum;

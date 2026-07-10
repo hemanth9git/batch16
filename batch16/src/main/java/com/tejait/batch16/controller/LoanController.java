@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tejait.batch16.model.BusinessProduct;
+import com.tejait.batch16.model.CompanyAddress;
+import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.service.LoanService;
 
@@ -50,6 +52,28 @@ public class LoanController {
 		product.setAppid(appId);
 		BusinessProduct savedProduct=service.saveBusinessProductDetails(product);
 		return new ResponseEntity<BusinessProduct>(savedProduct, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveCompanyDetails/{appId}")
+	public ResponseEntity<CompanyDetails> saveCompanyDetails(@RequestBody CompanyDetails companyDetails,@PathVariable Integer appId){
+		companyDetails.setAppId(appId);
+		CompanyDetails savedDetails=service.saveCompanyDetails(companyDetails);
+		return new ResponseEntity<CompanyDetails>(savedDetails, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getCompanyDetails/{appId}")
+	public ResponseEntity<CompanyDetails> getCompanyDetails(@PathVariable Integer appId){
+		CompanyDetails getDetails=service.getCompanyDetails(appId);
+		return new ResponseEntity<CompanyDetails>(getDetails, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping("/saveCompanyAddress/{appId}")
+	public ResponseEntity<CompanyAddress> saveCompanyAddress(@PathVariable Integer appId,@RequestBody CompanyAddress address){
+		address.setAppId(appId);
+		CompanyAddress savedAddress=service.saveCompanyAddress(address);
+		return new ResponseEntity<CompanyAddress>(savedAddress, HttpStatus.OK);
+		
 	}
 	
 	
