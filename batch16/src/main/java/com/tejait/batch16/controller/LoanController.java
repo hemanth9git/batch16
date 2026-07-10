@@ -75,7 +75,10 @@ public class LoanController {
 		return new ResponseEntity<CompanyAddress>(savedAddress, HttpStatus.OK);
 		
 	}
-	
-	
+	@GetMapping("/getCompanyAddress/{appId}")
+	public ResponseEntity<CompanyAddress> getCompanyAddress(@PathVariable Integer appId){
+		CompanyAddress getAddress=service.getCompanyAddress(appId);
+		return new ResponseEntity<CompanyAddress>(getAddress, HttpStatus.OK);
+	}
 
 }

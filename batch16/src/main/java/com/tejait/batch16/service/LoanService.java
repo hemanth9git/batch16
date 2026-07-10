@@ -24,4 +24,6 @@ public interface LoanService {
 
 	CompanyAddress saveCompanyAddress(CompanyAddress address);
 
+	CompanyAddress getCompanyAddress(Integer appId);
+
 }

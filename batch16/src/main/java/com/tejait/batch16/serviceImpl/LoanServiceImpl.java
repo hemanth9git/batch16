@@ -118,6 +118,12 @@ public class LoanServiceImpl implements LoanService{
 		}
 		return addressRepository.save(gotAddress);
 	}
+
+	@Override
+	public CompanyAddress getCompanyAddress(Integer appId) {
+		
+		return addressRepository.findByAppId(appId);
+	}
 	
 	
 
