@@ -32,7 +32,7 @@ public class LoanController {
 	@GetMapping("/getOverviewDetails/{appId}")
 	public ResponseEntity<Overview> getOverviewDetails(@PathVariable Integer appId) {
 		Overview savedOverview=service.getOverviewDetails(appId);
-		return new ResponseEntity<Overview>(savedOverview, HttpStatus.OK);
+		return new ResponseEntity<>(savedOverview, HttpStatus.OK);
 	}
 	
 	@PostMapping("/applyLoan")
@@ -41,10 +41,10 @@ public class LoanController {
 		return new ResponseEntity<>(savedLoan, HttpStatus.CREATED);
 	}
 	
-	@GetMapping("getLoanDetails/{appId}")
+	@GetMapping("/getLoanDetails/{appId}")
 	public ResponseEntity<LoanApplication> getLoanDetails(@PathVariable Integer appId){
 		LoanApplication getLoan=service.getLoanDetails(appId);
-		return new ResponseEntity<LoanApplication>(getLoan, HttpStatus.OK);
+		return new ResponseEntity<>(getLoan, HttpStatus.OK);
 	}
 
 	@GetMapping("loanTaskboard")
@@ -58,26 +58,26 @@ public class LoanController {
 	public ResponseEntity<BusinessProduct> saveBusinessProductDetails(@PathVariable Integer appId,@RequestBody BusinessProduct product){
 		product.setAppid(appId);
 		BusinessProduct savedProduct=service.saveBusinessProductDetails(product);
-		return new ResponseEntity<BusinessProduct>(savedProduct, HttpStatus.OK);
+		return new ResponseEntity<>(savedProduct, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getProductDetails/{appId}")
 	public ResponseEntity<BusinessProduct> getProductDetails(@PathVariable Integer appId){
 		BusinessProduct getProduct=service.getProductDetails(appId);
-		return new ResponseEntity<BusinessProduct>(getProduct, HttpStatus.OK);
+		return new ResponseEntity<>(getProduct, HttpStatus.OK);
 	}
 	
 	@PostMapping("/saveCompanyDetails/{appId}")
 	public ResponseEntity<CompanyDetails> saveCompanyDetails(@RequestBody CompanyDetails companyDetails,@PathVariable Integer appId){
 		companyDetails.setAppId(appId);
 		CompanyDetails savedDetails=service.saveCompanyDetails(companyDetails);
-		return new ResponseEntity<CompanyDetails>(savedDetails, HttpStatus.OK);
+		return new ResponseEntity<>(savedDetails, HttpStatus.OK);
 	}
 	
 	@GetMapping("/getCompanyDetails/{appId}")
 	public ResponseEntity<CompanyDetails> getCompanyDetails(@PathVariable Integer appId){
 		CompanyDetails getDetails=service.getCompanyDetails(appId);
-		return new ResponseEntity<CompanyDetails>(getDetails, HttpStatus.OK);
+		return new ResponseEntity<>(getDetails, HttpStatus.OK);
 	}
 	
 	
@@ -85,13 +85,13 @@ public class LoanController {
 	public ResponseEntity<CompanyAddress> saveCompanyAddress(@PathVariable Integer appId,@RequestBody CompanyAddress address){
 		address.setAppId(appId);
 		CompanyAddress savedAddress=service.saveCompanyAddress(address);
-		return new ResponseEntity<CompanyAddress>(savedAddress, HttpStatus.OK);
+		return new ResponseEntity<>(savedAddress, HttpStatus.OK);
 		
 	}
 	@GetMapping("/getCompanyAddress/{appId}")
 	public ResponseEntity<CompanyAddress> getCompanyAddress(@PathVariable Integer appId){
 		CompanyAddress getAddress=service.getCompanyAddress(appId);
-		return new ResponseEntity<CompanyAddress>(getAddress, HttpStatus.OK);
+		return new ResponseEntity<>(getAddress, HttpStatus.OK);
 	}
 
 }

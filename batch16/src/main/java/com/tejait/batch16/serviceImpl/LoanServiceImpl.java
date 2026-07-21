@@ -135,7 +135,7 @@ public class LoanServiceImpl implements LoanService{
 			
 			return addressRepository.save(gotAddress);
 		}
-		return addressRepository.save(gotAddress);
+		return addressRepository.save(address);
 	}
 
 	@Override
