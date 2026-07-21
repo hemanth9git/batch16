@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
 import com.tejait.batch16.exceptions.IdNotFoundException;
 import com.tejait.batch16.model.BusinessProduct;
@@ -23,11 +24,29 @@ import lombok.AllArgsConstructor;
 public class LoanServiceImpl implements LoanService{
 
 	LoanRepository repository;
-	
 	BusinessProductRepository productRepository;
 	CompanyDetailsRepository detailsRepository;
 	CompanyAddressRepository addressRepository;
 
+	@Override
+	public Overview getOverviewDetails(Integer appId) {
+		
+		LoanApplication loanApplication=repository.findById(appId).get();
+		BusinessProduct businessProduct=productRepository.findByAppid(appId);
+		CompanyDetails companyDetails=detailsRepository.findByAppId(appId);
+		
+		Overview overview = new Overview();
+		overview.setAppId(appId);
+		overview.setCompanyName(companyDetails.getCompanyName());
+		overview.setCompanyPan(companyDetails.getCompanyPan());
+		overview.setLoanAmt(businessProduct.getLoanAmount());
+		overview.setMail(loanApplication.getMailId());
+		overview.setMobile(loanApplication.getMobile());
+		overview.setTenure(businessProduct.getTenure());
+		return overview;
+	}
+	
+	
 	@Override
 	public LoanApplication applyLoan(LoanApplication loan) {
 		loan.setCustomerName(loan.getFname().concat(" "+loan.getLname()));
@@ -124,6 +143,8 @@ public class LoanServiceImpl implements LoanService{
 		
 		return addressRepository.findByAppId(appId);
 	}
+
+	
 	
 	
 

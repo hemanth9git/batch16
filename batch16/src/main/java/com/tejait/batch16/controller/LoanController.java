@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
@@ -27,6 +28,12 @@ import lombok.AllArgsConstructor;
 public class LoanController {
 	
 	LoanService service;
+	
+	@GetMapping("/getOverviewDetails/{appId}")
+	public ResponseEntity<Overview> getOverviewDetails(@PathVariable Integer appId) {
+		Overview savedOverview=service.getOverviewDetails(appId);
+		return new ResponseEntity<Overview>(savedOverview, HttpStatus.OK);
+	}
 	
 	@PostMapping("/applyLoan")
 	public ResponseEntity<LoanApplication> applyLoan(@RequestBody LoanApplication loan){

@@ -2,6 +2,7 @@ package com.tejait.batch16.service;
 
 import java.util.List;
 
+import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
@@ -25,5 +26,7 @@ public interface LoanService {
 	CompanyAddress saveCompanyAddress(CompanyAddress address);
 
 	CompanyAddress getCompanyAddress(Integer appId);
+
+	Overview getOverviewDetails(Integer appId);
 
 }
