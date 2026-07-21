@@ -29,4 +29,6 @@ public interface LoanService {
 
 	Overview getOverviewDetails(Integer appId);
 
+	BusinessProduct getProductDetails(Integer appId);
+
 }

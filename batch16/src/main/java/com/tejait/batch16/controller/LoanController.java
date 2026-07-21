@@ -61,6 +61,12 @@ public class LoanController {
 		return new ResponseEntity<BusinessProduct>(savedProduct, HttpStatus.OK);
 	}
 	
+	@GetMapping("/getProductDetails/{appId}")
+	public ResponseEntity<BusinessProduct> getProductDetails(@PathVariable Integer appId){
+		BusinessProduct getProduct=service.getProductDetails(appId);
+		return new ResponseEntity<BusinessProduct>(getProduct, HttpStatus.OK);
+	}
+	
 	@PostMapping("/saveCompanyDetails/{appId}")
 	public ResponseEntity<CompanyDetails> saveCompanyDetails(@RequestBody CompanyDetails companyDetails,@PathVariable Integer appId){
 		companyDetails.setAppId(appId);

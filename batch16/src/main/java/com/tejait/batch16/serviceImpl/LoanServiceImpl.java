@@ -144,6 +144,13 @@ public class LoanServiceImpl implements LoanService{
 		return addressRepository.findByAppId(appId);
 	}
 
+
+	@Override
+	public BusinessProduct getProductDetails(Integer appId) {
+		
+		return productRepository.findByAppid(appId);
+	}
+
 	
 	
 	
