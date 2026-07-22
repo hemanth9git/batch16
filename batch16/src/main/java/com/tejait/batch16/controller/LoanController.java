@@ -1,5 +1,6 @@
 package com.tejait.batch16.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
@@ -88,10 +91,17 @@ public class LoanController {
 		return new ResponseEntity<>(savedAddress, HttpStatus.OK);
 		
 	}
+	
 	@GetMapping("/getCompanyAddress/{appId}")
 	public ResponseEntity<CompanyAddress> getCompanyAddress(@PathVariable Integer appId){
 		CompanyAddress getAddress=service.getCompanyAddress(appId);
 		return new ResponseEntity<>(getAddress, HttpStatus.OK);
+	}
+	
+	@PostMapping("saveJsonfileData/{appId}")
+	public String uploadJson(@RequestParam("file") MultipartFile file,@PathVariable Integer appId) throws IOException{
+		
+		return service.saveJsonData(file,appId);
 	}
 
 }

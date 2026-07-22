@@ -1,7 +1,12 @@
 package com.tejait.batch16.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
@@ -30,5 +35,7 @@ public interface LoanService {
 	Overview getOverviewDetails(Integer appId);
 
 	BusinessProduct getProductDetails(Integer appId);
+
+	String saveJsonData(MultipartFile file, Integer appId) throws StreamReadException, DatabindException, IOException;
 
 }

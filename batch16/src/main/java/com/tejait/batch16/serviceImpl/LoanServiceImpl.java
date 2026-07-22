@@ -1,9 +1,15 @@
 package com.tejait.batch16.serviceImpl;
 
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
 import com.tejait.batch16.exceptions.IdNotFoundException;
@@ -11,10 +17,12 @@ import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
+import com.tejait.batch16.model.PersonDetails;
 import com.tejait.batch16.repository.BusinessProductRepository;
 import com.tejait.batch16.repository.CompanyAddressRepository;
 import com.tejait.batch16.repository.CompanyDetailsRepository;
 import com.tejait.batch16.repository.LoanRepository;
+import com.tejait.batch16.repository.PersonDetailsRepository;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +35,8 @@ public class LoanServiceImpl implements LoanService{
 	BusinessProductRepository productRepository;
 	CompanyDetailsRepository detailsRepository;
 	CompanyAddressRepository addressRepository;
+	
+	PersonDetailsRepository personRepository;
 
 	@Override
 	public Overview getOverviewDetails(Integer appId) {
@@ -149,6 +159,23 @@ public class LoanServiceImpl implements LoanService{
 	public BusinessProduct getProductDetails(Integer appId) {
 		
 		return productRepository.findByAppid(appId);
+	}
+
+
+	@Override
+	public String saveJsonData(MultipartFile file,Integer appId) throws StreamReadException, DatabindException, IOException {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		
+		List<PersonDetails> persons = Arrays.asList(mapper.readValue(file.getInputStream(), PersonDetails[].class));
+		
+		for(PersonDetails person:persons) {
+			person.setAppid(appId);
+		}
+		
+		personRepository.saveAll(persons);
+		
+		return "File data inserted successfully";
 	}
 
 	
