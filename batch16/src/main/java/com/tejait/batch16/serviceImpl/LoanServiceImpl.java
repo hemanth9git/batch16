@@ -2,6 +2,7 @@ package com.tejait.batch16.serviceImpl;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -162,20 +163,38 @@ public class LoanServiceImpl implements LoanService{
 	}
 
 
+
+
+
 	@Override
-	public String saveJsonData(MultipartFile file,Integer appId) throws StreamReadException, DatabindException, IOException {
+	public List<PersonDetails> readJson(MultipartFile file) throws StreamReadException, DatabindException, IOException {
+	   
+	     ObjectMapper mapper = new ObjectMapper();
+	    List<PersonDetails> savedList= Arrays.asList(mapper.readValue(file.getInputStream(), PersonDetails[].class));
+	    return savedList;
+	}
+
+
+	@Override
+	public List<PersonDetails> getPersonDetails(Integer appId) {
 		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		List<PersonDetails> persons = Arrays.asList(mapper.readValue(file.getInputStream(), PersonDetails[].class));
-		
-		for(PersonDetails person:persons) {
-			person.setAppid(appId);
-		}
-		
-		personRepository.saveAll(persons);
-		
-		return "File data inserted successfully";
+		return personRepository.findByAppid(appId);
+	}
+
+
+	@Override
+	public List<PersonDetails> savePersonDataList(List<PersonDetails> persons, Integer appId) {
+		if (persons == null || persons.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 1. Assign the appId to each PersonDetails object
+        for (PersonDetails person : persons) {
+            person.setAppid(appId);
+        }
+
+        // 2. saveAll() returns the saved List<PersonDetails> with generated IDs
+        return personRepository.saveAll(persons);
 	}
 
 	

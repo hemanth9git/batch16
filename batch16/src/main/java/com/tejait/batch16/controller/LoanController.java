@@ -15,11 +15,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
+import com.tejait.batch16.model.PersonDetails;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -98,10 +101,22 @@ public class LoanController {
 		return new ResponseEntity<>(getAddress, HttpStatus.OK);
 	}
 	
-	@PostMapping("saveJsonfileData/{appId}")
-	public String uploadJson(@RequestParam("file") MultipartFile file,@PathVariable Integer appId) throws IOException{
-		
-		return service.saveJsonData(file,appId);
+	@PostMapping("/saveJsonfileData/{appId}")
+	public ResponseEntity<List<PersonDetails>> saveJsonData(@RequestBody List<PersonDetails> persons, @PathVariable Integer appId) {
+	    List<PersonDetails> savedList = service.savePersonDataList(persons, appId);
+	    return new ResponseEntity<>(savedList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/readJson")
+	public ResponseEntity<List<PersonDetails>> readJson(@RequestParam("file") MultipartFile file) throws StreamReadException, DatabindException, IOException{
+		List<PersonDetails> readList=service.readJson(file);
+		return  new ResponseEntity<>(readList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getPersonDetails/{appId}")
+	public ResponseEntity<List<PersonDetails>> getPersonDetails(@PathVariable Integer appId){
+		List<PersonDetails> person=service.getPersonDetails(appId);
+		return new ResponseEntity<>(person, HttpStatus.OK);
 	}
 
 }

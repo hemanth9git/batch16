@@ -12,6 +12,7 @@ import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
+import com.tejait.batch16.model.PersonDetails;
 
 public interface LoanService {
 
@@ -36,6 +37,11 @@ public interface LoanService {
 
 	BusinessProduct getProductDetails(Integer appId);
 
-	String saveJsonData(MultipartFile file, Integer appId) throws StreamReadException, DatabindException, IOException;
+
+	List<PersonDetails> readJson(MultipartFile file) throws StreamReadException, DatabindException, IOException;
+
+	List<PersonDetails> getPersonDetails(Integer appId);
+
+	List<PersonDetails> savePersonDataList(List<PersonDetails> persons, Integer appId);
 
 }
