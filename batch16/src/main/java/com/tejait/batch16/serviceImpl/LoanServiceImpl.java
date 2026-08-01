@@ -1,16 +1,27 @@
 package com.tejait.batch16.serviceImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tejait.batch16.Batch16Application;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
 import com.tejait.batch16.exceptions.IdNotFoundException;
@@ -19,11 +30,13 @@ import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
+import com.tejait.batch16.model.SalesReport;
 import com.tejait.batch16.repository.BusinessProductRepository;
 import com.tejait.batch16.repository.CompanyAddressRepository;
 import com.tejait.batch16.repository.CompanyDetailsRepository;
 import com.tejait.batch16.repository.LoanRepository;
 import com.tejait.batch16.repository.PersonDetailsRepository;
+import com.tejait.batch16.repository.SalesRepository;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -31,6 +44,10 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class LoanServiceImpl implements LoanService{
+	
+	 private final List<SalesReport> list = new ArrayList<>();
+	
+	public static final Logger logger=LogManager.getLogger(Batch16Application.class);
 
 	LoanRepository repository;
 	BusinessProductRepository productRepository;
@@ -38,6 +55,7 @@ public class LoanServiceImpl implements LoanService{
 	CompanyAddressRepository addressRepository;
 	
 	PersonDetailsRepository personRepository;
+	SalesRepository salesRepository;
 
 	@Override
 	public Overview getOverviewDetails(Integer appId) {
@@ -196,6 +214,103 @@ public class LoanServiceImpl implements LoanService{
         // 2. saveAll() returns the saved List<PersonDetails> with generated IDs
         return personRepository.saveAll(persons);
 	}
+
+
+	
+	
+	@Override
+	public List<SalesReport> readExcel(MultipartFile file) throws IOException {
+
+		list.clear();
+
+	    XSSFWorkbook workbook = new XSSFWorkbook(file.getInputStream());
+
+	    XSSFSheet sheet = workbook.getSheetAt(0);
+
+	    DataFormatter formatter = new DataFormatter();
+
+	    FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
+	    for (int i = 6; i < 18; i++) {
+
+	        logger.info("Reading Row : {}", i + 1);
+
+	        Row row = sheet.getRow(i);
+
+	        if (row == null) {
+	            continue;
+	        }
+	        SalesReport sales = new SalesReport();
+	        
+
+	        
+
+	        // Date
+	        Cell dateCell = row.getCell(0);
+	        if (dateCell != null) {
+	            sales.setDate(dateCell.getDateCellValue());
+	        }
+
+	        // Order Number
+	        sales.setOrderno(
+	                Integer.parseInt(formatter.formatCellValue(row.getCell(1), evaluator)));
+
+	        // Invoice Number
+	        sales.setInvoiceno(
+	                formatter.formatCellValue(row.getCell(2), evaluator));
+
+	        // Party Name
+	        sales.setPartyName(
+	                formatter.formatCellValue(row.getCell(3), evaluator));
+
+	        // Party Phone Number
+	        logger.info("Phone Number : {}", formatter.formatCellValue(row.getCell(5), evaluator));
+
+	        sales.setPartyPhoneNum(
+	                Long.parseLong(formatter.formatCellValue(row.getCell(5), evaluator)));
+
+	        // Total Amount
+	        sales.setTotalAmount(
+	                Integer.parseInt(formatter.formatCellValue(row.getCell(7), evaluator)));
+
+	        // Received Amount
+	        sales.setRecievedOrPaidAmount(
+	                Integer.parseInt(formatter.formatCellValue(row.getCell(9), evaluator)));
+
+	        // Balance Amount
+	        sales.setBalanceAmount(
+	                Integer.parseInt(formatter.formatCellValue(row.getCell(11), evaluator)));
+
+	        list.add(sales);
+
+	        logger.info("Row {} inserted successfully.", i + 1);
+	    }
+
+	    workbook.close();
+	   
+	    return list;
+	}
+
+	@Override
+	public List<SalesReport> getSalesReport(Integer appid) {
+	
+		return salesRepository.findByAppid(appid) ;
+	}
+
+
+	@Override
+	public List<SalesReport> saveSalesReport(Integer appId,List<SalesReport> salesReport) {
+		for(SalesReport report:salesReport) {
+			report.setAppid(appId);
+		}
+		salesRepository.saveAll(salesReport);
+		
+		return salesRepository.findByAppid(appId);
+	}
+	
+	
+	
+	
 
 	
 	

@@ -13,6 +13,7 @@ import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
+import com.tejait.batch16.model.SalesReport;
 
 public interface LoanService {
 
@@ -43,5 +44,11 @@ public interface LoanService {
 	List<PersonDetails> getPersonDetails(Integer appId);
 
 	List<PersonDetails> savePersonDataList(List<PersonDetails> persons, Integer appId);
+
+	List<SalesReport> readExcel(MultipartFile file) throws IOException;
+
+	List<SalesReport> getSalesReport(Integer appid);
+
+	List<SalesReport> saveSalesReport(Integer appId, List<SalesReport> salesReport);
 
 }
