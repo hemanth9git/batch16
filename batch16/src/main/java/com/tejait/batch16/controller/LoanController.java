@@ -3,6 +3,8 @@ package com.tejait.batch16.controller;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,12 +19,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.tejait.batch16.Batch16Application;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
 import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
+import com.tejait.batch16.model.SalesReport;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -34,6 +38,7 @@ import lombok.AllArgsConstructor;
 public class LoanController {
 	
 	LoanService service;
+	public static final Logger logger=LogManager.getLogger(Batch16Application.class);
 	
 	@GetMapping("/getOverviewDetails/{appId}")
 	public ResponseEntity<Overview> getOverviewDetails(@PathVariable Integer appId) {
@@ -117,6 +122,28 @@ public class LoanController {
 	public ResponseEntity<List<PersonDetails>> getPersonDetails(@PathVariable Integer appId){
 		List<PersonDetails> person=service.getPersonDetails(appId);
 		return new ResponseEntity<>(person, HttpStatus.OK);
+	}
+	
+	@PostMapping("readExcel")
+	public ResponseEntity<List<SalesReport>> readExcel(@RequestParam("file") MultipartFile file) throws IOException{
+		List<SalesReport> readList=service.readExcel(file);
+		return new ResponseEntity<>(readList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getSalesReportDetails/{appid}")
+	public ResponseEntity<List<SalesReport>> getSalesReport(@PathVariable Integer appid){
+		List<SalesReport> savedList=service.getSalesReport(appid);
+		return new ResponseEntity<>(savedList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveSalesReport/{appId}")
+	public ResponseEntity<List<SalesReport>> saveSalesReport(
+	        @PathVariable Integer appId,
+	        @RequestBody List<SalesReport> salesReport) {
+
+	    List<SalesReport> savedList = service.saveSalesReport(appId, salesReport);
+
+	    return new ResponseEntity<List<SalesReport>>(savedList, HttpStatus.OK);
 	}
 
 }
