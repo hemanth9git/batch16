@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.opencsv.exceptions.CsvValidationException;
 import com.tejait.batch16.Batch16Application;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
@@ -27,6 +28,7 @@ import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
 import com.tejait.batch16.model.SalesReport;
+import com.tejait.batch16.model.TransactionHistory;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -144,6 +146,24 @@ public class LoanController {
 	    List<SalesReport> savedList = service.saveSalesReport(appId, salesReport);
 
 	    return new ResponseEntity<List<SalesReport>>(savedList, HttpStatus.OK);
+	}
+	
+	@PostMapping("/readTransactionsCsv")
+	public ResponseEntity<List<TransactionHistory>> readTransactionsCsv(@RequestParam("file") MultipartFile file)throws IOException, CsvValidationException{
+		List<TransactionHistory> readedList=service.readTransactionsCSV(file);
+		return new ResponseEntity<>(readedList,HttpStatus.OK);
+	}
+	
+	@GetMapping("/getTxnsData/{appId}")
+	public ResponseEntity<List<TransactionHistory>> getTxnsData(@PathVariable Integer appId){
+		List<TransactionHistory> getTransaction=service.getTxnsData(appId);
+		return new ResponseEntity<>(getTransaction, HttpStatus.OK);
+	}
+	
+	@PostMapping("/saveTxnsData/{appId}")
+	public ResponseEntity<List<TransactionHistory>> saveTxnsData(@PathVariable Integer appId,List<TransactionHistory> saveList){
+		List<TransactionHistory> list=service.saveTxnsData(appId,saveList);
+		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 }

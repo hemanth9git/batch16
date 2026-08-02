@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
+import com.opencsv.exceptions.CsvValidationException;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.model.BusinessProduct;
 import com.tejait.batch16.model.CompanyAddress;
@@ -14,6 +15,7 @@ import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
 import com.tejait.batch16.model.SalesReport;
+import com.tejait.batch16.model.TransactionHistory;
 
 public interface LoanService {
 
@@ -50,5 +52,11 @@ public interface LoanService {
 	List<SalesReport> getSalesReport(Integer appid);
 
 	List<SalesReport> saveSalesReport(Integer appId, List<SalesReport> salesReport);
+
+	List<TransactionHistory> readTransactionsCSV(MultipartFile file) throws IOException, CsvValidationException;
+
+	List<TransactionHistory> getTxnsData(Integer appId);
+
+	List<TransactionHistory> saveTxnsData(Integer appId, List<TransactionHistory> saveList);
 
 }

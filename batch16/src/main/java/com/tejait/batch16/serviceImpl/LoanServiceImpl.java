@@ -1,10 +1,14 @@
 package com.tejait.batch16.serviceImpl;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.core.exc.StreamReadException;
 import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import com.tejait.batch16.Batch16Application;
 import com.tejait.batch16.dto.Overview;
 import com.tejait.batch16.exceptions.DetailsAlreadyExists;
@@ -31,12 +37,14 @@ import com.tejait.batch16.model.CompanyDetails;
 import com.tejait.batch16.model.LoanApplication;
 import com.tejait.batch16.model.PersonDetails;
 import com.tejait.batch16.model.SalesReport;
+import com.tejait.batch16.model.TransactionHistory;
 import com.tejait.batch16.repository.BusinessProductRepository;
 import com.tejait.batch16.repository.CompanyAddressRepository;
 import com.tejait.batch16.repository.CompanyDetailsRepository;
 import com.tejait.batch16.repository.LoanRepository;
 import com.tejait.batch16.repository.PersonDetailsRepository;
 import com.tejait.batch16.repository.SalesRepository;
+import com.tejait.batch16.repository.TransactionRepository;
 import com.tejait.batch16.service.LoanService;
 
 import lombok.AllArgsConstructor;
@@ -46,6 +54,7 @@ import lombok.AllArgsConstructor;
 public class LoanServiceImpl implements LoanService{
 	
 	 private final List<SalesReport> list = new ArrayList<>();
+	 private final List<TransactionHistory> transactionList = new ArrayList<>();
 	
 	public static final Logger logger=LogManager.getLogger(Batch16Application.class);
 
@@ -53,6 +62,7 @@ public class LoanServiceImpl implements LoanService{
 	BusinessProductRepository productRepository;
 	CompanyDetailsRepository detailsRepository;
 	CompanyAddressRepository addressRepository;
+	TransactionRepository transactionRepository;
 	
 	PersonDetailsRepository personRepository;
 	SalesRepository salesRepository;
@@ -306,6 +316,69 @@ public class LoanServiceImpl implements LoanService{
 		salesRepository.saveAll(salesReport);
 		
 		return salesRepository.findByAppid(appId);
+	}
+
+
+	@Override
+	public List<TransactionHistory> readTransactionsCSV(MultipartFile file) throws IOException, CsvValidationException {
+		
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+		
+
+		CSVReader csvReader = new CSVReader(reader);
+		
+		String[] row;
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		
+		csvReader.readNext();
+		
+		while((row=csvReader.readNext()) != null) {
+			
+			TransactionHistory transaction = new TransactionHistory();
+			
+			 try {
+			        Date transactionDate = sdf.parse(row[0].trim());
+			        transaction.setTransactionDate(transactionDate);
+			    } catch (ParseException e) {
+			        e.printStackTrace();
+			        continue; // Skip this row if date is invalid
+			    }
+			 
+			   transaction.setActivity(row[1]);
+			   transaction.setSource(row[2]);
+			   transaction.setTxnId(Long.parseLong(row[3]));
+			   transaction.setComment(row[4]);
+			   transaction.setDebtAmt(row[5].isBlank() ? 0.0 : Double.parseDouble(row[5]));
+			   transaction.setCreditAmt(row[6].isBlank() ? 0.0 : Double.parseDouble(row[6]));
+			   transaction.setTransactionBreakup(row[7]);
+			   transaction.setTransactionStatus(row[8]);
+			   
+			   transactionList.add(transaction);
+
+		}
+		csvReader.close();
+		return transactionList;
+		
+	}
+
+
+	@Override
+	public List<TransactionHistory> getTxnsData(Integer appId) {
+		
+		return transactionRepository.findByAppid(appId);
+	}
+
+
+	@Override
+	public List<TransactionHistory> saveTxnsData(Integer appId,List<TransactionHistory> saveList) {
+		
+		for(TransactionHistory history:saveList) {
+			history.setAppid(appId);
+		}
+		transactionRepository.saveAll(transactionList);
+		return transactionRepository.findByAppid(appId);
 	}
 	
 	
