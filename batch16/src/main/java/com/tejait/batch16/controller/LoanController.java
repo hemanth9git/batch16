@@ -148,22 +148,10 @@ public class LoanController {
 	    return new ResponseEntity<List<SalesReport>>(savedList, HttpStatus.OK);
 	}
 	
-	@PostMapping("/readTransactionsCsv")
-	public ResponseEntity<List<TransactionHistory>> readTransactionsCsv(@RequestParam("file") MultipartFile file)throws IOException, CsvValidationException{
-		List<TransactionHistory> readedList=service.readTransactionsCSV(file);
-		return new ResponseEntity<>(readedList,HttpStatus.OK);
-	}
-	
 	@GetMapping("/getTxnsData/{appId}")
 	public ResponseEntity<List<TransactionHistory>> getTxnsData(@PathVariable Integer appId){
 		List<TransactionHistory> getTransaction=service.getTxnsData(appId);
 		return new ResponseEntity<>(getTransaction, HttpStatus.OK);
-	}
-	
-	@PostMapping("/saveTxnsData/{appId}")
-	public ResponseEntity<List<TransactionHistory>> saveTxnsData(@PathVariable Integer appId,List<TransactionHistory> saveList){
-		List<TransactionHistory> list=service.saveTxnsData(appId,saveList);
-		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
 
 }
