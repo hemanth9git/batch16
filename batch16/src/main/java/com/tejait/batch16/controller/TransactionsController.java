@@ -42,5 +42,11 @@ public class TransactionsController {
 		List<TransactionHistory> list=service.saveTxnsData(appId,saveList);
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
+	
+	@GetMapping("/filtertransactions")
+	public ResponseEntity<List<TransactionHistory>> getTransactionsFilter(@RequestParam Integer appId,@RequestParam String statusOrInstrument,@RequestParam List<String> statusOrInstrumentTypesList){
+		List<TransactionHistory> filterList=service.getTransactionsFilter(appId,statusOrInstrument,statusOrInstrumentTypesList);
+		return new ResponseEntity<List<TransactionHistory>>(filterList, HttpStatus.OK);
+	}
 
 }

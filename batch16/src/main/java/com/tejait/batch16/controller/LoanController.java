@@ -153,5 +153,11 @@ public class LoanController {
 		List<TransactionHistory> getTransaction=service.getTxnsData(appId);
 		return new ResponseEntity<>(getTransaction, HttpStatus.OK);
 	}
+	
+	@GetMapping("/filtertransactions/{appId}")
+	public ResponseEntity<List<TransactionHistory>> getTransactionsFilter(@PathVariable Integer appId,@RequestParam String statusOrInstrument,@RequestParam List<String> statusOrInstrumentTypesList){
+		List<TransactionHistory> filterList=service.getTransactionsFilter(appId,statusOrInstrument,statusOrInstrumentTypesList);
+		return new ResponseEntity<>(filterList, HttpStatus.OK);
+	}
 
 }

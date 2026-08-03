@@ -380,6 +380,98 @@ public class LoanServiceImpl implements LoanService{
 		transactionRepository.saveAll(transactionList);
 		return transactionRepository.findByAppid(appId);
 	}
+
+
+	@Override
+	public List<TransactionHistory> getTransactionsFilter(Integer appId, String statusOrInstrument,
+			List<String> statusOrInstrumentTypeList) {
+		
+		List<TransactionHistory> filtered = new ArrayList<>();
+		
+		List<TransactionHistory> transactions = transactionRepository.findByAppid(appId);
+		
+		if(statusOrInstrument == null || statusOrInstrument.isEmpty()) {
+			return transactions;
+		}
+		
+		switch(statusOrInstrument.toLowerCase()) {
+		
+		case "status":
+			
+			for(TransactionHistory transactions1:transactions) {
+				
+				for(String filters:statusOrInstrumentTypeList) {
+					
+					switch(filters) {
+					
+					case "SUCCESS":
+						if("SUCCESS".equalsIgnoreCase(transactions1.getTransactionStatus())) {
+							filtered.add(transactions1);
+						}
+						break;
+						
+					case "FAILED":
+						if("FAILED".equalsIgnoreCase(transactions1.getTransactionStatus())) {
+							filtered.add(transactions1);
+						}
+						break;
+						
+					case "PENDING":
+						
+						if("PENDING".equalsIgnoreCase(transactions1.getTransactionStatus())) {
+							filtered.add(transactions1);
+						}
+						break;
+						
+					case "CANCELLED":
+						if("CANCELLED".equalsIgnoreCase(transactions1.getTransactionStatus())) {
+							filtered.add(transactions1);
+							break;
+						}
+						
+					}
+				}
+			}
+			break;
+			
+		case "instrument":
+			
+			for(TransactionHistory transaction:transactions) {
+				for(String filter:statusOrInstrumentTypeList) {
+					
+					switch(filter) {
+					
+					case "upi":
+						if("upi".equalsIgnoreCase(transaction.getInstrument())) {
+							transactions.add(transaction);
+						}
+						break;
+						
+					case "wallet":
+						if("wallet".equalsIgnoreCase(transaction.getInstrument())) {
+							transactions.add(transaction);
+						}
+						break;
+						
+					case "creditcard":
+						if("creditcard".equalsIgnoreCase(transaction.getInstrument())) {
+							transactions.add(transaction);
+						}
+						break;
+						
+					case "debitcard":
+						if("debitcard".equalsIgnoreCase(transaction.getInstrument())) {
+							transactions.add(transaction);
+						}
+						break;
+					}
+				}
+			}
+			break;
+		}
+		
+		return filtered.stream().distinct().toList();
+	}
 	
 	
 	

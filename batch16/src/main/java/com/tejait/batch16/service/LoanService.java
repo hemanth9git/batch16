@@ -59,4 +59,7 @@ public interface LoanService {
 
 	List<TransactionHistory> saveTxnsData(Integer appId, List<TransactionHistory> saveList);
 
+	List<TransactionHistory> getTransactionsFilter(Integer appId, String statusOrInstrument,
+			List<String> statusOrInstrumentTypesList);
+
 }
