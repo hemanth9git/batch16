@@ -1,6 +1,7 @@
 package com.tejait.batch16.service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -61,5 +62,9 @@ public interface LoanService {
 
 	List<TransactionHistory> getTransactionsFilter(Integer appId, String statusOrInstrument,
 			List<String> statusOrInstrumentTypesList);
+
+	
+
+	List<TransactionHistory> fetchTransactions(Integer appId, String duration, LocalDate startDate, LocalDate endDate);
 
 }

@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -471,6 +474,75 @@ public class LoanServiceImpl implements LoanService{
 		}
 		
 		return filtered.stream().distinct().toList();
+	}
+
+
+	@Override
+	public List<TransactionHistory> fetchTransactions(Integer appId, String duration, LocalDate startDate,
+			LocalDate endDate) {
+		
+		
+		List<TransactionHistory> transactions = transactionRepository.findByAppid(appId);
+		
+		if(transactions.isEmpty()) {
+			return transactions;
+		}
+		
+		LocalDate today = LocalDate.now();
+		
+		if(duration!=null && !duration.isBlank()) {
+			LocalDate fromDate;
+			
+			switch(duration.toLowerCase()) {
+			
+			case "last month":
+				fromDate=today.minusMonths(1);
+				break;
+				
+			case "last 3 months":
+				fromDate=today.minusMonths(3);
+				break;
+				
+			case "last 6 months":
+				fromDate=today.minusMonths(6);
+				break;
+			case "last year":
+				fromDate=today.minusYears(1);
+				break;
+			default:
+				return transactions;
+				
+			}
+			return transactions.stream().filter(t->{
+				 Date date =t.getTransactionDate();
+				 if(date==null) {
+					 return false;
+				 }
+				 LocalDate txnDate=date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				 return !txnDate.isBefore(fromDate)
+                         && !txnDate.isAfter(today);
+			}).collect(Collectors.toList());
+		}
+		
+		if(startDate	!=null && endDate !=null) {
+			return transactions.stream().filter(t->{
+				
+				 Date date = t.getTransactionDate();
+
+                 if (date == null) {
+                     return false;
+                 }
+
+                 LocalDate txnDate = date.toInstant()
+                         .atZone(ZoneId.systemDefault())
+                         .toLocalDate();
+
+                 return !txnDate.isBefore(startDate)
+                         && !txnDate.isAfter(endDate);
+             })
+             .collect(Collectors.toList());
+		}
+		return transactions;
 	}
 	
 	

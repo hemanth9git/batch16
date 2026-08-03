@@ -1,10 +1,12 @@
 package com.tejait.batch16.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -158,6 +160,23 @@ public class LoanController {
 	public ResponseEntity<List<TransactionHistory>> getTransactionsFilter(@PathVariable Integer appId,@RequestParam String statusOrInstrument,@RequestParam List<String> statusOrInstrumentTypesList){
 		List<TransactionHistory> filterList=service.getTransactionsFilter(appId,statusOrInstrument,statusOrInstrumentTypesList);
 		return new ResponseEntity<>(filterList, HttpStatus.OK);
+	}
+	
+	@GetMapping("/fetchtransactions/{appId}")
+	public ResponseEntity<List<TransactionHistory>> fetchTransactions(@PathVariable Integer appId,
+					@RequestParam(required = false) String duration,
+					
+					@RequestParam(required = false)
+					@DateTimeFormat(pattern = "dd-mm-yyyy")
+					LocalDate startDate,
+					
+					@RequestParam(required = false)
+					@DateTimeFormat(pattern = "dd-MM-yyyy")
+    					LocalDate endDate
+					
+				){
+		List<TransactionHistory> fetchedRecords=service.fetchTransactions(appId,duration,startDate,endDate);
+		return new ResponseEntity<List<TransactionHistory>>(fetchedRecords, HttpStatus.OK);
 	}
 
 }
