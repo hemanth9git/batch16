@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -478,8 +479,8 @@ public class LoanServiceImpl implements LoanService{
 
 
 	@Override
-	public List<TransactionHistory> fetchTransactions(Integer appId, String duration, LocalDate startDate,
-			LocalDate endDate) {
+	public List<TransactionHistory> fetchTransactions(Integer appId, String duration, String startDate,
+			String endDate) {
 		
 		
 		List<TransactionHistory> transactions = transactionRepository.findByAppid(appId);
@@ -489,6 +490,7 @@ public class LoanServiceImpl implements LoanService{
 		}
 		
 		LocalDate today = LocalDate.now();
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		
 		if(duration!=null && !duration.isBlank()) {
 			LocalDate fromDate;
@@ -525,6 +527,9 @@ public class LoanServiceImpl implements LoanService{
 		}
 		
 		if(startDate	!=null && endDate !=null) {
+			
+			 LocalDate start = LocalDate.parse(startDate, formatter);
+		     LocalDate end = LocalDate.parse(endDate, formatter);
 			return transactions.stream().filter(t->{
 				
 				 Date date = t.getTransactionDate();
@@ -537,8 +542,8 @@ public class LoanServiceImpl implements LoanService{
                          .atZone(ZoneId.systemDefault())
                          .toLocalDate();
 
-                 return !txnDate.isBefore(startDate)
-                         && !txnDate.isAfter(endDate);
+                 return !txnDate.isBefore(start)
+                         && !txnDate.isAfter(end);
              })
              .collect(Collectors.toList());
 		}

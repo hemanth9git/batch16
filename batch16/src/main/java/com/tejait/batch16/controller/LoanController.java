@@ -166,13 +166,9 @@ public class LoanController {
 	public ResponseEntity<List<TransactionHistory>> fetchTransactions(@PathVariable Integer appId,
 					@RequestParam(required = false) String duration,
 					
-					@RequestParam(required = false)
-					@DateTimeFormat(pattern = "dd-mm-yyyy")
-					LocalDate startDate,
+					@RequestParam(required = false) String startDate,
 					
-					@RequestParam(required = false)
-					@DateTimeFormat(pattern = "dd-MM-yyyy")
-    					LocalDate endDate
+					@RequestParam(required = false) String endDate
 					
 				){
 		List<TransactionHistory> fetchedRecords=service.fetchTransactions(appId,duration,startDate,endDate);

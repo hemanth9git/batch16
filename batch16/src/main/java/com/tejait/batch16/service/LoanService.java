@@ -65,6 +65,6 @@ public interface LoanService {
 
 	
 
-	List<TransactionHistory> fetchTransactions(Integer appId, String duration, LocalDate startDate, LocalDate endDate);
+	List<TransactionHistory> fetchTransactions(Integer appId, String duration, String startDate, String endDate);
 
 }
