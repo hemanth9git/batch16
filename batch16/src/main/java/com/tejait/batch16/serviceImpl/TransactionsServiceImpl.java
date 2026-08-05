@@ -168,6 +168,8 @@ public class TransactionsServiceImpl implements TransactionsService{
 							transactions.add(transaction);
 						}
 						break;
+						
+					
 					}
 				}
 			}
